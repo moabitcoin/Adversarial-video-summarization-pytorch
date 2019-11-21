@@ -1,10 +1,12 @@
 import copy
 import sys
 import time
+
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from tqdm import tqdm
+
 from auto_encoder.lstm_network import AutoLSTM
 from configs.config import get_config
 from tools.dataset import DatasetParser
@@ -39,12 +41,13 @@ class trainer(object):
     best_model_wts = copy.deepcopy(model.state_dict())
     dl = DataLoader(train_parser, batch_size=self.config.batch_size,
                     shuffle=True,
-                    num_workers=num_workers,collate_fn=my_collate)
+                    num_workers=num_workers, collate_fn=my_collate)
     for epoch in range(num_epoches):
       train_loss = 0
+      pbar = tqdm(dl, desc='Batch', ascii=True)
       try:
-        for (filepath, inputs, inputs_rev) in tqdm(dl):
-          step +=1
+        for b in pbar:
+          (filepath, inputs, inputs_rev) = b
           inputs = inputs.float().transpose(0, 1)
           inputs_rev = inputs_rev.float().transpose(0, 1)
 
@@ -68,14 +71,11 @@ class trainer(object):
           torch.save(model.module.state_dict(),
                      '{}/autoencoder_encoder.pth'.format(model_save_dir))
           au_loss = torch.stack(losses).mean()
-          print('Epoch: {} \tTraining Loss: {:.6f}'.format(epoch, au_loss))
+          pbar.set_description('loss {}'.format(loss.item()))
           self.log_writer.update_loss(au_loss, epoch,
                                       'autoencoder loss')
+          step += 1
       except TypeError :
-        print('hna')
-        print(type(filepath))
-        print(type(inputs))
-        print(type(inputs_rev))
         continue
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:0f}s'.format(time_elapsed // 60,
