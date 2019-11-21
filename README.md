@@ -1,6 +1,5 @@
 # Introduction
-We want to qualitatively estimate the visual diversity within our drive data. For measuring scene diversity we want to use visual semantic similarity of the drives. F.example drives in high traffic density vs drives of vehicle waiting at traffic lights. We have already explored static scene similarity and search in a parallel [project](https://gitlab.mobilityservices.io/am/roam/perception/prototypes/semantic-frame-index/tree/master) with promising results. The first step towards comparing drive videos is to generate a vector representation from drive videos. The second step uses the pre-trained video representation model to training a key-frame selector + summarisation model driven by semantic visual similarity.
-
+We want to qualitatively estimate the visual diversity within our drive data. For measuring scene diversity we want to use visual semantic similarity of the drives. F.example drives in high traffic density vs drives of vehicle waiting at traffic lights. 
 # Training/Validation Data
 We use pre-trained ResNet50 features extracted from BDD100K videos as our per-frame visual representation. To reduce computation we downsample the [BDD100K](https://bdd-data.berkeley.edu) videos(30fps@1280x720) as 5fps@640x360. This generates `TMAX`~200 vectors of `D=2048` dimensions per video. We use temporal windows of length `T=64` randomly sampled from `TMAX` positions.
 
