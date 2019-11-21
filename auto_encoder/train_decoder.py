@@ -86,13 +86,9 @@ class trainer(object):
 
 
 if __name__ == '__main__':
-  num_epoches = 200
-
   config = get_config(mode='train')
-
   t = trainer(config)
   model = AutoLSTM(config.input_size, config.hidden_size,
                    config.num_layers, bidirectional=True)
   model.to(t.device)
-
-  t.train_model(model, num_epoches, config.model_save_dir)
+  t.train_model(model, config.n_epochs, config.model_save_dir)
