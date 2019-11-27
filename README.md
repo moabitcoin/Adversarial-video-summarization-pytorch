@@ -12,3 +12,32 @@ We use a LSTM Autoencoder to model video representation generator. The core idea
 ![](imgs/adversarial-lstm.png)
 
 The core idea use this [paper](https://mahasseb.github.io/files/2017/cvpr_video_summarization.pdf) `TODO`
+
+## Getting Started
+This is an example of how you may give instructions on setting up your project locally. To get a local copy up and running follow these simple example steps.
+
+### Train encoder LSTM (bidirectional = False)
+```
+python auto_encoder/train_encoder.py —train_features_list <train_features_list_path> --log_dir <save_logs_dir_path> —model_save_dir <path_to_model_dir>
+```
+### Train decoder LSTM (bidirectional = True)
+```
+python auto_encoder/train_decoder.py —train_features_list <train_features_list_path> --log_dir <save_logs_dir_path> —model_save_dir <path_to_model_dir>
+```
+`learning_rate = 1e-4` <br>
+`batch_size = 256` <br>
+`num_workers = 12` <br>
+`n_epochs = 300` <br>
+`save_interval = 1000 step` <br>
+
+If you want to change this values you can add the variables as command line arguments.
+
+### Build Features index
+```
+python scripts/build_index.py —model_path <path_to_model> —features_list <path to text file containing resnet features files list> —index_path <path_where_to_save_index>
+```
+### Query by Video Features
+```
+python scripts/matcher.py --index_path <path_to_index> --model_path <path_to_model> -features_query <path_to_video_features_file>
+```
+<code>ex: python scripts/matcher.py -i drives-index.pck -m encoder_lstm.pth-43000 -q 000000_016839bf-0247-432f-8af6-5d33a12a0341-video.npy </code>
