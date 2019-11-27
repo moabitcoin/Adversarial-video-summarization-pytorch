@@ -23,7 +23,7 @@ class trainer(object):
       print("Using CUDA, benchmarking implementations", file=sys.stderr)
       torch.backends.cudnn.benchmark = True
 
-  def train_model(self, model, num_epoches, model_save_dir):
+  def train_model(self, model, num_epoches, model_save_dir, save_interval=1000):
 
     step = 0
     losses = []
@@ -66,10 +66,11 @@ class trainer(object):
 
           train_loss += loss.item() * inputs.size(1)
           print('loss {}'.format(loss.item()))
-          torch.save(model.module.elstm.state_dict(),
-                     '{}/encoder_lstm.pth'.format(model_save_dir))
-          torch.save(model.module.state_dict(),
-                     '{}/autoencoder_encoder.pth'.format(model_save_dir))
+          if step % save_interval == 0:
+            torch.save(model.module.elstm.state_dict(),
+                       '{}/encoder_lstm.pth-{}'.format(model_save_dir, step))
+            torch.save(model.module.state_dict(),
+                       '{}/autoencoder_encoder.pth-{}'.format(model_save_dir, step))
           au_loss = torch.stack(losses).mean()
           pbar.set_description('loss {}'.format(loss.item()))
           self.log_writer.update_loss(au_loss, epoch,
