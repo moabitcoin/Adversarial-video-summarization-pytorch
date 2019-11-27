@@ -1,3 +1,4 @@
+import os
 import random
 
 import numpy as np
@@ -46,12 +47,12 @@ class DatasetParser(Dataset):
 
     file_path, feature_batch, feature_batch_rev, mask_rev = self.read_features(
       file_batch)
-
     return file_path, file_batch, feature_batch, feature_batch_rev, mask_rev
 
   def read_feature(self, filepath):
 
-    f = np.load(filepath)
+    f = np.load(
+      os.path.join('/nas/team-space/experiments/drive-features', filepath))
     # sample a window from all timesteps
     # of atleast self.min_ts and atmost self.max_ts
     if f.shape[0] < self.min_ts:
@@ -104,7 +105,6 @@ class DatasetParser(Dataset):
     d = self.read_feature(self.feature_files[index])
 
     if d is None:
-      print(self.feature_files[index])
       return None
     (filepath, feat, feat_rev, _) = d
     feat = feat.astype(np.float32)
