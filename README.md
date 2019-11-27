@@ -41,3 +41,9 @@ python scripts/build_index.py —model_path <path_to_model> —features_list <pa
 python scripts/matcher.py --index_path <path_to_index> --model_path <path_to_model> -features_query <path_to_video_features_file>
 ```
 <code>ex: python scripts/matcher.py -i drives-index.pck -m encoder_lstm.pth-43000 -q 000000_016839bf-0247-432f-8af6-5d33a12a0341-video.npy </code>
+
+## License
+
+Copyright © 2019 MoabitCoin
+
+Distributed under the MIT License (MIT).
