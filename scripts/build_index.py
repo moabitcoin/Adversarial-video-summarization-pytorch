@@ -19,7 +19,7 @@ class index(object):
     self.model = AutoLSTM(self.config.input_size, self.config.hidden_size,
                           self.config.num_layers, bidirectional=False)
     self.model.to(self.device)
-    self.model.elstm.load_state_dict(self.weights)
+    self.model.load_state_dict(self.weights)
     self.model.eval()
     self.data_parser = DatasetParser(self.config.features_list)
     self.dl = DataLoader(self.data_parser, batch_size=self.config.batch_size,
@@ -32,11 +32,11 @@ class index(object):
     for b in self.pbar:
       (filepath, inputs, inputs_rev) = b
       inputs = inputs.to(self.device)
-      outputs, (h_n, c_n) = self.model.elstm(inputs)
+      outputs = self.model.elstm(inputs)
       outputs = outputs.detach().cpu().numpy()
       res = dict(zip(filepath, outputs))
       results.update(res)
-    with open(self.config.index_path) as fp:
+    with open(self.config.index_path, 'wb') as fp:
       pickle.dump(results, fp)
 
 
