@@ -63,8 +63,7 @@ Here are the most 5 used similarity distances:
 For This index, we used `Chebyshev` distance
 ### Step2 ###
 #### Train summarizer using Lstm-autoencoder pre-trained weights ####
-
-
+![](imgs/sum-gan.png)
 ## License
 
 Copyright © 2019 MoabitCoin
