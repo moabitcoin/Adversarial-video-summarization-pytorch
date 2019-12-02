@@ -37,7 +37,7 @@ class Matcher(object):
     res = []
     for q in range(0, len(self.matrix)):
       y = scipy.spatial.distance.cdist(self.matrix[q].reshape(1,-1), v,
-                                       'cosine').reshape(-1)
+                                       'chebyshev').reshape(-1)
       res.append(float(y))
     return res
 
@@ -46,6 +46,7 @@ class Matcher(object):
     # getting top n videos
     res = dict(sorted(zip(video_distances, self.file_names)))
     topn_results = {k: res[k] for k in list(res)[:topn]}
+    print(topn_results)
     nearest_video_paths, best_distances = zip(*topn_results.items())
     return best_distances, nearest_video_paths
 
@@ -56,7 +57,7 @@ class Matcher(object):
     outputs = self.model.elstm(inputs)
     video_feat = outputs.cpu().detach().numpy()
     paths, distances = matcher.match(video_feat, self.config.topn)
-    distances = [(1 - dist) for dist in distances]
+    # distances = [(1 - dist) for dist in distances]
     return paths, distances
 
 
