@@ -87,7 +87,6 @@ class dLSTM(nn.Module):
   """
 
   def forward(self, x):
-    print(x.shape)
     self.lstm.flatten_parameters()
     # decoded: (seq_len, 1, hidden_size * 1) = (seq_len, 1, 2048)
     decoded, _ = self.lstm(x)
@@ -133,16 +132,13 @@ class VAE(nn.Module):
     seq_len = x.size(0)
     # h_n, c_n: (num_layers * 1, 1, hidden_size) = (2, 1, 512)
     h_n, c_n = self.elstm(x)
-    print('hn shape', h_n.shape)
 
 
     # reshape h_n to (1, 1, 512 * 2)
     h_n_reshape = h_n.view(1, 1, -1)
-    print('hn shape', h_n_reshape.shape)
 
     # repeat seq_len times to (seq_len, 1, 2048)
     h_n_reshape = h_n_reshape.expand(seq_len, 1, h_n_reshape.data.shape[2])
-    print('hn shape', h_n_reshape.shape)
 
     # h: (num_layers * 1, hidden_size) = (2, 2048)
     h = h_n.squeeze(1)
