@@ -160,7 +160,7 @@ class LstmGan(object):
 
         self.s_e_optimizer.zero_grad()
         s_e_loss.backward(retain_graph=True)
-        torch.nn.utils.clip_grad_norm(self.model.parameters(), self.config.clip)
+        torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.config.clip)
         self.s_e_optimizer.step()
 
         # add to loss history
@@ -176,6 +176,8 @@ class LstmGan(object):
         rand_dec_h_last, rand_dec_prob = self.discriminator.module(rand_decoded)
         # gan loss
         gan_loss = self.get_gan_loss(fea_prob, dec_prob, rand_dec_prob)
+        print('dec', dec_prob)
+        print('rand dec', rand_dec_prob)
         tqdm.write('gan_loss: %.3f' % gan_loss.item())
 
         # minimize => # 2. For learning θd, minimize (Lreconst+LGAN).
@@ -184,7 +186,7 @@ class LstmGan(object):
         self.d_optimizer.zero_grad()
         d_loss.backward(retain_graph=True)
         # gradient clipping
-        torch.nn.utils.clip_grad_norm(self.model.parameters(), self.config.clip)
+        torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.config.clip)
         self.d_optimizer.step()
 
         # add to loss history
@@ -202,7 +204,7 @@ class LstmGan(object):
 
         self.c_optimizer.zero_grad()
         # gradient clipping
-        torch.nn.utils.clip_grad_norm(self.model.parameters(), self.config.clip)
+        torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.config.clip)
         c_loss.backward()
         self.c_optimizer.step()
 
