@@ -176,8 +176,6 @@ class LstmGan(object):
         rand_dec_h_last, rand_dec_prob = self.discriminator.module(rand_decoded)
         # gan loss
         gan_loss = self.get_gan_loss(fea_prob, dec_prob, rand_dec_prob)
-        print('dec', dec_prob)
-        print('rand dec', rand_dec_prob)
         tqdm.write('gan_loss: %.3f' % gan_loss.item())
 
         # minimize => # 2. For learning θd, minimize (Lreconst+LGAN).
